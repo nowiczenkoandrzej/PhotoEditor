@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+    buildscript {
+        dependencies {
+            classpath 'com.google.dagger:hilt-android-gradle-plugin:2.43.2'
+        }
+    }
+}
+rootProject.name = "ImageCropper"
+include ':app'

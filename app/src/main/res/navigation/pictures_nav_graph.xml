@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pictures_nav_graph"
+    app:startDestination="@id/addPictureFragment">
+
+    <fragment
+        android:id="@+id/addPictureFragment"
+        android:name="com.nowiczenkoandrzej.imagecropper.presentation.add_picture.AddPictureFragment"
+        android:label="Picture Editor"
+        tools:layout="@layout/fragment_add_picture">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/overviewFragment"
+        android:name="com.nowiczenkoandrzej.imagecropper.presentation.picture_overview.OverviewFragment"
+        android:label="Your Pictures"
+        tools:layout="@layout/fragment_overview" >
+    </fragment>
+
+</navigation>
