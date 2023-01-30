@@ -28,9 +28,9 @@
 
         <Button
             android:id="@+id/btn_crop"
-            android:layout_margin="16dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:text="Crop Image"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
@@ -63,6 +63,42 @@
             app:layout_constraintTop_toBottomOf="@+id/crop_image_view"
             app:srcCompat="@drawable/ic_flip_24" />
 
+        <Button
+            android:id="@+id/btn_3_4"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4:3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_rotate_left" />
+
+        <Button
+            android:id="@+id/btn_9_16"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="16:9"
+            app:layout_constraintStart_toEndOf="@+id/btn_3_4"
+            app:layout_constraintTop_toBottomOf="@+id/btn_flip_image_horizontally" />
+
+        <Button
+            android:id="@+id/btn_1_1"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1:1"
+            app:layout_constraintStart_toEndOf="@+id/btn_9_16"
+            app:layout_constraintTop_toBottomOf="@+id/btn_flip_image_horizontally" />
+
+        <Button
+            android:id="@+id/btn_free_aspect_ratio"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog.Flush"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Custom"
+            app:layout_constraintStart_toEndOf="@+id/btn_1_1"
+            app:layout_constraintTop_toBottomOf="@+id/btn_flip_image_horizontally" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
@@ -78,12 +114,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
+
         <ImageView
             android:id="@+id/iv_cropped_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="16dp"
-
             app:layout_constraintDimensionRatio="3:4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"

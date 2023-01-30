@@ -40,20 +40,6 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-/*private val cropImage = registerForActivityResult(CropImageContract()) { result ->
-    if (result.isSuccessful && result.uriContent != null) {
-        val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, result.uriContent)
-
-        viewModel.onEvent(AddPictureEvent.PictureCropped(
-            PictureModel(
-                title = "",
-                bitmap = bitmap,
-            )
-        ))
-    } else {
-        Toast.makeText(this, result.error?.message, Toast.LENGTH_SHORT).show()
-    }
-}*/
 
 
 

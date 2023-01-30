@@ -32,7 +32,6 @@ class AddPictureFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        viewModel.onEvent(AddPictureEvent.EnterActivity)
         _binding = FragmentAddPictureBinding.inflate(inflater,container,false)
         return binding.root
     }
@@ -45,11 +44,10 @@ class AddPictureFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.onEvent(AddPictureEvent.EnterActivity)
     }
 
     override fun onStop() {
-        viewModel.onEvent(AddPictureEvent.EnterActivity)
+
         super.onStop()
     }
 
@@ -94,6 +92,22 @@ class AddPictureFragment : Fragment() {
 
         binding.btnFlipImageHorizontally.setOnClickListener {
             binding.cropImageView.flipImageHorizontally()
+        }
+
+        binding.btn11.setOnClickListener {
+            binding.cropImageView.setAspectRatio(1,1)
+        }
+
+        binding.btn34.setOnClickListener {
+            binding.cropImageView.setAspectRatio(3,4)
+        }
+
+        binding.btn916.setOnClickListener {
+            binding.cropImageView.setAspectRatio(9,19)
+        }
+
+        binding.btnFreeAspectRatio.setOnClickListener {
+            binding.cropImageView.clearAspectRatio()
         }
 
     }
