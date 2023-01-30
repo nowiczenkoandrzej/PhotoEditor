@@ -13,7 +13,7 @@ fun PictureEntity.toPictureModel(): PictureModel {
 
 fun PictureModel.toPictureEntity(): PictureEntity {
     return PictureEntity(
-        title = this.title,
-        picture = this.bitmap
+        title = this.title!!,
+        picture = this.bitmap!!
     )
 }

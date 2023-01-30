@@ -25,13 +25,15 @@ class AddPictureFragment : Fragment() {
 
     private val viewModel: AddPictureViewModel by viewModels()
 
-    private lateinit var binding: FragmentAddPictureBinding
+    private var _binding: FragmentAddPictureBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAddPictureBinding.inflate(inflater,container,false)
+        viewModel.onEvent(AddPictureEvent.EnterActivity)
+        _binding = FragmentAddPictureBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -43,7 +45,17 @@ class AddPictureFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        viewModel.onEvent(AddPictureEvent.BackFromChoosingPicture)
+        viewModel.onEvent(AddPictureEvent.EnterActivity)
+    }
+
+    override fun onStop() {
+        viewModel.onEvent(AddPictureEvent.EnterActivity)
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun setListeners(){
@@ -89,15 +101,20 @@ class AddPictureFragment : Fragment() {
     private fun subscribeCollector() {
         lifecycleScope.launchWhenStarted {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { state ->
-                    state.picture?.let { picture ->
+                viewModel.pictureState.collect { state ->
+                    state.bitmap?.let { bitmap ->
                         Glide
                             .with(requireContext())
-                            .load(picture.bitmap)
+                            .load(bitmap)
                             .into(binding.ivCroppedImage)
                     }
-
-                    when (state.chooseImageToCrop) {
+                }
+            }
+        }
+        lifecycleScope.launchWhenStarted {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.pickPictureToCrop.collect {
+                    when(it) {
                         true -> getImageFromGallery.launch("image/*")
                         false -> Unit
                     }
@@ -107,6 +124,7 @@ class AddPictureFragment : Fragment() {
     }
 
     private val getImageFromGallery = registerForActivityResult(GetContent()) { uri: Uri? ->
+        viewModel.onEvent(AddPictureEvent.EnterActivity)
         if(uri != null) {
             val bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, uri)
             binding.cropImageView.setImageBitmap(bitmap)
