@@ -1,5 +1,9 @@
 package com.nowiczenkoandrzej.imagecropper.presentation.add_picture
 
+import android.graphics.Canvas
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
+import android.graphics.Paint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nowiczenkoandrzej.imagecropper.domain.model.PictureModel
@@ -32,6 +36,7 @@ class AddPictureViewModel @Inject constructor(
             is AddPictureEvent.PictureCropped -> pictureCropped(event.picture)
             is AddPictureEvent.SavePicture -> savePicture(picture = event.picture)
             is AddPictureEvent.EnterActivity -> backFromChoosingPicture()
+            is AddPictureEvent.AddFilter -> addFilter()
         }
     }
 
@@ -39,7 +44,6 @@ class AddPictureViewModel @Inject constructor(
         viewModelScope.launch {
             _pickPictureToCrop.send(true)
         }
-
     }
 
     private fun backFromChoosingPicture(){
@@ -56,6 +60,31 @@ class AddPictureViewModel @Inject constructor(
         viewModelScope.launch {
             repository.insertPicture(picture)
         }
+    }
+
+    private fun addFilter(){
+        if(pictureState.value.bitmap == null) return
+
+        val canvas = Canvas(pictureState.value.bitmap!!)
+
+        val paint = Paint()
+        paint.colorFilter = ColorMatrixColorFilter(
+            ColorMatrix(floatArrayOf(
+                -1f, 0f, 0f, 0f, 255f,
+                -0f, -1f, 0f, 0f, 255f,
+                -0f, 0f, -1f, 0f, 255f,
+                -0f, 0f, 0f, 1f, 0f
+
+            ))
+        )
+        canvas.drawBitmap(
+            pictureState.value.bitmap!!,
+            0f,
+            0f,
+            paint
+        )
+
+
     }
 
 }

@@ -9,7 +9,7 @@
         android:id="@+id/addPictureFragment"
         android:name="com.nowiczenkoandrzej.imagecropper.presentation.add_picture.AddPictureFragment"
         android:label="Picture Editor"
-        tools:layout="@layout/fragment_add_picture">
+        tools:layout="@layout/fragment_picture">
 
     </fragment>
 

@@ -1,6 +1,6 @@
 package com.nowiczenkoandrzej.imagecropper.presentation.add_picture
 
-import android.graphics.Bitmap
+import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -15,24 +15,27 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
-import com.nowiczenkoandrzej.imagecropper.databinding.FragmentAddPictureBinding
+import com.nowiczenkoandrzej.imagecropper.databinding.FragmentPictureBinding
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import com.nowiczenkoandrzej.imagecropper.domain.model.PictureModel
+import com.nowiczenkoandrzej.imagecropper.presentation.util.PictureFilter
 
 @AndroidEntryPoint
 class AddPictureFragment : Fragment() {
 
     private val viewModel: AddPictureViewModel by viewModels()
 
-    private var _binding: FragmentAddPictureBinding? = null
+    private var _binding: FragmentPictureBinding? = null
     private val binding get() = _binding!!
+
+    private var picture: Bitmap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAddPictureBinding.inflate(inflater,container,false)
+        _binding = FragmentPictureBinding.inflate(inflater,container,false)
         return binding.root
     }
 
@@ -40,16 +43,10 @@ class AddPictureFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setListeners()
         subscribeCollector()
+
+
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
-    override fun onStop() {
-
-        super.onStop()
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -57,19 +54,18 @@ class AddPictureFragment : Fragment() {
     }
 
     private fun setListeners(){
-        binding.btnChooseImage.setOnClickListener {
+        binding.btnNewImage.setOnClickListener {
             viewModel.onEvent(AddPictureEvent.ChoosePicture)
         }
 
-        binding.btnCrop.setOnClickListener {
+        binding.btnSave.setOnClickListener {
             val displayMetrics = DisplayMetrics()
 
-            val width = displayMetrics.widthPixels
-            val height = width * 3 / 4
+            val size = displayMetrics.widthPixels
 
             val cropped: Bitmap? = binding.cropImageView.getCroppedImage(
-                reqWidth = width - 32,
-                reqHeight = height - 32
+                reqWidth = size - 32,
+                reqHeight = size - 32
             )
             viewModel.onEvent(AddPictureEvent.PictureCropped(
                 PictureModel(
@@ -78,8 +74,8 @@ class AddPictureFragment : Fragment() {
                 )
             ))
 
-            binding.containerEdit.isVisible = true
-            binding.containerCrop.isVisible = false
+            binding.containerEdit.isVisible = false
+            binding.containerPicture.isVisible = true
         }
 
         binding.btnRotateLeft.setOnClickListener {
@@ -109,6 +105,26 @@ class AddPictureFragment : Fragment() {
         binding.btnFreeAspectRatio.setOnClickListener {
             binding.cropImageView.clearAspectRatio()
         }
+
+        binding.filterNormal.setOnClickListener {
+            binding.cropImageView.setImageBitmap(picture)
+        }
+
+        binding.filterNegative.setOnClickListener {
+            val pf = PictureFilter(picture!!)
+            binding.cropImageView.setImageBitmap(pf.negativePicture())
+        }
+
+        binding.filterBlackWhite.setOnClickListener {
+            val pf = PictureFilter(picture!!)
+            binding.cropImageView.setImageBitmap(pf.blackAndWhitePicture())
+        }
+
+        binding.filterSepia.setOnClickListener {
+            val pf = PictureFilter(picture!!)
+            binding.cropImageView.setImageBitmap(pf.sepiaPicture())
+        }
+
 
     }
 
@@ -141,9 +157,10 @@ class AddPictureFragment : Fragment() {
         viewModel.onEvent(AddPictureEvent.EnterActivity)
         if(uri != null) {
             val bitmap = MediaStore.Images.Media.getBitmap(context?.contentResolver, uri)
+            picture = bitmap
             binding.cropImageView.setImageBitmap(bitmap)
-            binding.containerEdit.isVisible = false
-            binding.containerCrop.isVisible = true
+            binding.containerEdit.isVisible = true
+            binding.containerPicture.isVisible = false
         }
     }
 
