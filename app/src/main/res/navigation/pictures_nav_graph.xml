@@ -3,21 +3,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pictures_nav_graph"
-    app:startDestination="@id/addPictureFragment">
+    app:startDestination="@id/picturesListFragment">
 
     <fragment
-        android:id="@+id/addPictureFragment"
-        android:name="com.nowiczenkoandrzej.imagecropper.presentation.add_picture.AddPictureFragment"
-        android:label="Picture Editor"
-        tools:layout="@layout/fragment_picture">
+        android:id="@+id/picturesListFragment"
+        android:name="com.nowiczenkoandrzej.imagecropper.feature_pictures_list.presentation.PicturesListFragment"
+        android:label="fragment_pictures_list"
+        tools:layout="@layout/fragment_pictures_list">
 
+        <action
+            android:id="@+id/action_picturesListFragment_to_pictureDetailFragment"
+            app:destination="@id/pictureDetailFragment" />
+        <action
+            android:id="@+id/action_picturesListFragment_to_editPictureFragment"
+            app:destination="@id/editPictureFragment" />
     </fragment>
+
 
     <fragment
-        android:id="@+id/overviewFragment"
-        android:name="com.nowiczenkoandrzej.imagecropper.presentation.picture_overview.OverviewFragment"
-        android:label="Your Pictures"
-        tools:layout="@layout/fragment_overview" >
+        android:id="@+id/editPictureFragment"
+        android:name="com.nowiczenkoandrzej.imagecropper.feature_edit_picture.presentation.EditPictureFragment"
+        android:label="Edit Picture"
+        tools:layout="@layout/fragment_edit_picture">
+
+        <argument
+            android:name="picture"
+            app:argType="com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureModel" />
+        <action
+            android:id="@+id/action_editPictureFragment_to_picturesListFragment"
+            app:destination="@id/picturesListFragment" />
     </fragment>
+
+
+    <fragment
+        android:id="@+id/pictureDetailFragment"
+        android:name="com.nowiczenkoandrzej.imagecropper.feature_picture_details.presentation.PictureDetailFragment"
+        android:label="fragment_picture_detail"
+        tools:layout="@layout/fragment_picture_detail">
+        <argument
+            android:name="picture"
+            app:argType="com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureModel" />
+        <action
+            android:id="@+id/action_pictureDetailFragment_to_editPictureFragment"
+            app:destination="@id/editPictureFragment" />
+        <action
+            android:id="@+id/action_pictureDetailFragment_to_picturesListFragment"
+            app:destination="@id/picturesListFragment" />
+    </fragment>
+
 
 </navigation>

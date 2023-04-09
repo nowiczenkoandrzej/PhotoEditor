@@ -2,9 +2,9 @@ package com.nowiczenkoandrzej.imagecropper.di
 
 import android.app.Application
 import androidx.room.Room
-import com.nowiczenkoandrzej.imagecropper.data.local_data_source.PictureDatabase
-import com.nowiczenkoandrzej.imagecropper.data.repository.PictureRepositoryImpl
-import com.nowiczenkoandrzej.imagecropper.domain.repository.PictureRepository
+import com.nowiczenkoandrzej.imagecropper.core.data.local_data_source.PictureDatabase
+import com.nowiczenkoandrzej.imagecropper.core.data.repository.PictureRepositoryImpl
+import com.nowiczenkoandrzej.imagecropper.core.domain.repository.PictureRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +22,9 @@ object AppModule {
             app,
             PictureDatabase::class.java,
             PictureDatabase.DATABASE_NAME
-        ).build()
+        )
+            .fallbackToDestructiveMigration()
+            .build()
     }
 
     @Provides

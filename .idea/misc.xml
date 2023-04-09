@@ -3,18 +3,34 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.253" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_baseline_add_a_photo_24.xml" value="0.253" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_baseline_camera_24.xml" value="0.253" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_baseline_edit_24.xml" value="0.1975" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_baseline_photo_library_24.xml" value="0.253" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_baseline_rotate_left_24.xml" value="0.253" />
         <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_baseline_switch_camera_24.xml" value="0.1655" />
         <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_launcher_background.xml" value="0.156" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_outline_add_to_photos_24.xml" value="0.253" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/ic_outline_camera_24.xml" value="0.253" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/drawable/picture_gradient.xml" value="0.1" />
         <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/activity_cropper.xml" value="0.1" />
         <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/activity_main.xml" value="0.25" />
         <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/fragment_add_picture.xml" value="0.33" />
         <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/fragment_edit.xml" value="0.67" />
-        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/fragment_picture.xml" value="0.31666666666666665" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/fragment_edit_picture.xml" value="0.255050505050505" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/fragment_overview.xml" value="0.32407407407407407" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/fragment_picture.xml" value="0.24876847290640394" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/fragment_picture_detail.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/fragment_pictures_list.xml" value="0.25" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/layout/picture_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/menu/bottom_nav_menu.xml" value="0.275" />
+        <entry key="..\:/Users/pchmi/Desktop/Android kurs/ImageCropper/app/src/main/res/menu/edit_menu.xml" value="0.1" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Embedded JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

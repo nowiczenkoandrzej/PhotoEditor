@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".feature_pictures_list.presentation.PicturesListFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_pictures"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layoutAnimation="@anim/recycler_view_animation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28dp"
+        android:layout_marginBottom="28dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_baseline_add_24"
+        android:tint="@android:color/white"
+        app:backgroundTint="@color/dark_green"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_gallery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_outline_add_to_photos_24"
+        android:tint="@android:color/white"
+        android:visibility="invisible"
+        app:backgroundTint="@color/dark_green"
+        app:layout_constraintBottom_toTopOf="@+id/btn_main"
+        app:layout_constraintEnd_toEndOf="@+id/btn_main"
+        app:layout_constraintStart_toStartOf="@+id/btn_main" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_camera"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_outline_camera_24"
+        android:tint="@android:color/white"
+        android:visibility="invisible"
+        app:backgroundTint="@color/dark_green"
+        app:layout_constraintBottom_toTopOf="@+id/btn_gallery"
+        app:layout_constraintEnd_toEndOf="@+id/btn_main"
+        app:layout_constraintStart_toStartOf="@+id/btn_main" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
