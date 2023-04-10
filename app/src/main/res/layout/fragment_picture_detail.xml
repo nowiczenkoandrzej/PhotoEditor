@@ -34,25 +34,36 @@
         android:id="@+id/ib_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="36dp"
+        android:background="@null"
         android:src="@drawable/ic_baseline_edit_24"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@null"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_last_edit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="Last edit: 12.12.2023"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="sans-serif-light"
         android:textColor="@color/white"
         android:textSize="16sp"
-        android:fontFamily="sans-serif-light"
-        android:layout_marginBottom="24dp"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="Last edit: 12.12.2023" />
+
+    <ImageButton
+        android:id="@+id/ib_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="36dp"
+        android:background="@null"
+        android:src="@drawable/outline_delete_forever_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/ib_edit" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

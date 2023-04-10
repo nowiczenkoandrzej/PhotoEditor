@@ -2,37 +2,32 @@ package com.nowiczenkoandrzej.imagecropper.feature_pictures_list.presentation
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nowiczenkoandrzej.imagecropper.R
-import com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureModel
-import java.io.ByteArrayOutputStream
+import com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureItem
 
 class PicturesAdapter(
     val context: Context
 ): RecyclerView.Adapter<PicturesAdapter.ViewHolder>() {
 
-    private val pictures = ArrayList<PictureModel>()
+    private val pictures = ArrayList<PictureItem>()
     private lateinit var listener: ItemClickListener
 
     @SuppressLint("NotifyDataSetChanged")
-    fun setList(list: List<PictureModel>){
+    fun setList(list: List<PictureItem>){
         pictures.clear()
         pictures.addAll(list)
         notifyDataSetChanged()
     }
 
-    fun getItem(id: Int): PictureModel {
+    fun getItem(id: Int): PictureItem {
         return pictures[id]
     }
 
@@ -45,13 +40,12 @@ class PicturesAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.progressBar.isVisible = true
         Glide
             .with(context)
-            .load(pictures[position].editedBitmap)
+            .load(pictures[position].picture)
             .into(holder.picture)
-        holder.progressBar.isVisible = false
-
+        holder.title.text = pictures[position].title
+        holder.date.text = pictures[position].lastEdit.toString()
     }
 
     override fun getItemCount() = pictures.size

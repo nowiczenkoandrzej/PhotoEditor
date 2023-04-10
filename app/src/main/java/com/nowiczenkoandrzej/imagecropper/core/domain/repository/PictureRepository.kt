@@ -1,15 +1,14 @@
 package com.nowiczenkoandrzej.imagecropper.core.domain.repository
 
-import com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureModel
-import com.nowiczenkoandrzej.imagecropper.core.util.Resource
+import com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureItem
 import kotlinx.coroutines.flow.Flow
 
 interface PictureRepository {
 
-    fun getPictures(): Flow<List<PictureModel>>
+    fun getPictures(): Flow<List<PictureItem>>
 
-    suspend fun insertPicture(picture: PictureModel)
+    suspend fun insertPicture(picture: PictureItem)
 
-    suspend fun deletePicture(picture: PictureModel)
+    suspend fun deletePicture(picture: PictureItem)
 
 }

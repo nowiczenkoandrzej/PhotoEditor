@@ -6,8 +6,9 @@ import java.time.LocalDate
 
 @Parcelize
 data class PictureItem(
+    var id: Int? = null,
     val picture: String? = null,
     val originalPicture: String? = null,
     val title: String = "",
-    val laseEdit: LocalDate = LocalDate.now(),
+    val lastEdit: LocalDate = LocalDate.now(),
 ): Parcelable

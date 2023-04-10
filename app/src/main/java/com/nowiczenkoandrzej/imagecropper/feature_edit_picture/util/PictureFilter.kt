@@ -1,8 +1,13 @@
 package com.nowiczenkoandrzej.imagecropper.feature_edit_picture.util
 
+import android.content.Context
 import android.graphics.*
+import android.net.Uri
 
-class PictureFilter(bitmap: Bitmap) {
+class PictureFilter(uri: Uri, context: Context) {
+
+    private val inputStream = context.contentResolver.openInputStream(uri)
+    private val bitmap = BitmapFactory.decodeStream(inputStream)
 
     private val mutableBitmap = bitmap.copy(Bitmap.Config.ARGB_8888, true)
     private val paint = Paint()

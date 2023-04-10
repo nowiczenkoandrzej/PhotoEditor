@@ -11,8 +11,8 @@ data class PictureEntity(
 
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
-    val picture: Bitmap,
-    val originalBitmap: Bitmap,
+    val picture: String,
+    val originalPicture: String,
     val title: String,
     val date: LocalDate
 

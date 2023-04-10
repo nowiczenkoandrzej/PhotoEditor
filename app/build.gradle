@@ -74,9 +74,11 @@ dependencies {
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
-
     // Too Large Tool
     implementation 'com.gu.android:toolargetool:0.3.0'
+
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 }
 
 kapt {

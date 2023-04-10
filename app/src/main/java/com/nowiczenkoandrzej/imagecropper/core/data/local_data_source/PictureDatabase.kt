@@ -8,7 +8,7 @@ import com.nowiczenkoandrzej.imagecropper.core.data.local_data_source.converters
 
 @Database(
     entities = [PictureEntity::class],
-    version = 6
+    version = 8
 )
 @TypeConverters(PictureConverter::class, DateConverter::class)
 abstract class PictureDatabase: RoomDatabase() {

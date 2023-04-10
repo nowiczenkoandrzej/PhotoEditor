@@ -1,16 +1,18 @@
 package com.nowiczenkoandrzej.imagecropper.feature_edit_picture.presentation
 
 import android.app.AlertDialog
+import android.content.ContentValues
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.DisplayMetrics
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -19,16 +21,15 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import com.nowiczenkoandrzej.imagecropper.R
-import com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureModel
+import com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureItem
 import com.nowiczenkoandrzej.imagecropper.databinding.FragmentEditPictureBinding
+import com.nowiczenkoandrzej.imagecropper.feature_edit_picture.util.DialogClickListener
 import com.nowiczenkoandrzej.imagecropper.feature_edit_picture.util.FilterType
 import com.nowiczenkoandrzej.imagecropper.feature_edit_picture.util.PictureFilter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class EditPictureFragment : Fragment() {
+class EditPictureFragment : Fragment(), DialogClickListener {
 
     private val viewModel: EditPictureViewModel by viewModels()
 
@@ -41,7 +42,7 @@ class EditPictureFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.onEvent(EditPictureEvent.SetPictureToEdit(picture = args.picture))
+        viewModel.onEvent(EditPictureEvent.SetPictureToEdit(picture = args.picture, context = requireContext()))
     }
 
     override fun onCreateView(
@@ -55,6 +56,7 @@ class EditPictureFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
+
         subscribeCollector()
         setListeners()
         setFiltersToButton()
@@ -66,23 +68,10 @@ class EditPictureFragment : Fragment() {
     }
 
     private fun subscribeCollector(){
-        viewModel.editedPicture.onEach { picture ->
-            binding.cropImageView.setImageBitmap(picture.editedBitmap)
-        }.launchIn(lifecycleScope)
-
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.isLoading.collect{ isLoading ->
-                    when(isLoading) {
-                        true -> {
-                            binding.container.visibility = View.GONE
-                            binding.pgEdit.visibility = View.VISIBLE
-                        }
-                        false -> {
-                            binding.container.visibility = View.VISIBLE
-                            binding.pgEdit.visibility = View.GONE
-                        }
-                    }
+                viewModel.editedBitmap.collect { bitmap ->
+                    binding.cropImageView.setImageBitmap(bitmap)
                 }
             }
         }
@@ -91,7 +80,7 @@ class EditPictureFragment : Fragment() {
     private fun setListeners(){
 
         binding.btnSave.setOnClickListener {
-            savePicture()
+            showDialogToSetTitle()
         }
 
         // Rotation and flipping
@@ -131,29 +120,23 @@ class EditPictureFragment : Fragment() {
         // Filters
 
         binding.filterNormal.setOnClickListener {
-            viewModel.onEvent(EditPictureEvent.AddFilter(FilterType.Normal))
+            viewModel.onEvent(EditPictureEvent.AddFilter(FilterType.Normal, requireContext()))
         }
 
         binding.filterInvert.setOnClickListener {
-            viewModel.onEvent(EditPictureEvent.AddFilter(FilterType.Invert))
+            viewModel.onEvent(EditPictureEvent.AddFilter(FilterType.Invert, requireContext()))
         }
 
         binding.filterBlackWhite.setOnClickListener {
-            viewModel.onEvent(EditPictureEvent.AddFilter(FilterType.BlackAndWhite))
+            viewModel.onEvent(EditPictureEvent.AddFilter(FilterType.BlackAndWhite, requireContext()))
         }
 
         binding.filterSepia.setOnClickListener {
-            viewModel.onEvent(EditPictureEvent.AddFilter(FilterType.Sepia))
+            viewModel.onEvent(EditPictureEvent.AddFilter(FilterType.Sepia, requireContext()))
         }
     }
 
-    private fun savePicture() {
-
-        val builder = AlertDialog.Builder(requireContext())
-        val inflater = layoutInflater
-        val dialogLayout = inflater.inflate(R.layout.enter_title_dialog, null)
-        val edTitle = dialogLayout.findViewById<EditText>(R.id.ed_title)
-
+    private fun savePicture(title: String) {
 
         val displayMetrics = DisplayMetrics()
         val size = displayMetrics.widthPixels
@@ -162,28 +145,77 @@ class EditPictureFragment : Fragment() {
             reqHeight = size - 32
         )
 
+        val picture = getPicture(cropped!!, title) ?: return
 
-        viewModel.onEvent(EditPictureEvent.SavePicture(
-            PictureModel(
-                editedBitmap = cropped,
-              //  title = edTitle.text.toString()
-            )))
+        viewModel.onEvent(EditPictureEvent.SavePicture(picture))
+        navController.popBackStack(R.id.picturesListFragment, false)
+    }
 
-        binding.container.isVisible = true
-        binding.pgEdit.isVisible = false
+    private fun getPicture(bitmap: Bitmap, title: String): PictureItem?{
+        val uri: Uri = try {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, "image_${System.currentTimeMillis()}.jpg")
+                put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+                put(MediaStore.Images.Media.RELATIVE_PATH, "${Environment.DIRECTORY_DCIM}/PhotoEditor")
+            }
+            val contentResolver = requireContext().contentResolver
+            val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            val outputStream = contentResolver.openOutputStream(imageUri!!)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+            outputStream?.flush()
+            outputStream?.close()
+            imageUri
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        } ?: return null
 
-        navController.popBackStack()
+        return PictureItem(
+            picture = uri.toString(),
+            originalPicture = viewModel.editedPicture.value.originalPicture,
+            title = title
+        )
+
+    }
+
+    private fun showDialogToSetTitle() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Set Title")
+        val input = EditText(requireContext())
+        builder.setView(input)
+
+        builder.setPositiveButton("Save") { dialog, _ ->
+            onDialogPositiveClick(input.text.toString())
+        }
+
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            onDialogNegativeClick()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
     }
 
     private fun setFiltersToButton(){
-        val bitmap = BitmapFactory.decodeResource(resources, R.drawable.mountains_icon)
-        val pf1 = PictureFilter(bitmap = bitmap)
-        val pf2 = PictureFilter(bitmap = bitmap)
-        val pf3 = PictureFilter(bitmap = bitmap)
+        val resourceId = R.drawable.mountains_icon
+        val packageName = requireContext().packageName
+        val uri = Uri.parse("android.resource://$packageName/$resourceId")
+
+        val pf1 = PictureFilter(uri = uri, requireContext())
+        val pf2 = PictureFilter(uri = uri, requireContext())
+        val pf3 = PictureFilter(uri = uri, requireContext())
 
         binding.filterInvert.setImageBitmap(pf1.invertPicture())
         binding.filterBlackWhite.setImageBitmap(pf2.blackAndWhitePicture())
         binding.filterSepia.setImageBitmap(pf3.sepiaPicture())
+    }
+
+    override fun onDialogPositiveClick(title: String) {
+        savePicture(title)
+    }
+
+    override fun onDialogNegativeClick() {
+        return
     }
 
 }

@@ -28,7 +28,7 @@
 
         <argument
             android:name="picture"
-            app:argType="com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureModel" />
+            app:argType="com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureItem" />
         <action
             android:id="@+id/action_editPictureFragment_to_picturesListFragment"
             app:destination="@id/picturesListFragment" />
@@ -42,7 +42,7 @@
         tools:layout="@layout/fragment_picture_detail">
         <argument
             android:name="picture"
-            app:argType="com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureModel" />
+            app:argType="com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureItem" />
         <action
             android:id="@+id/action_pictureDetailFragment_to_editPictureFragment"
             app:destination="@id/editPictureFragment" />
