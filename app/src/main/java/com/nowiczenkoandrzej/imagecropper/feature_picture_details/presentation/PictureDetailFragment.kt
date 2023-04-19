@@ -2,6 +2,7 @@ package com.nowiczenkoandrzej.imagecropper.feature_picture_details.presentation
 
 import android.net.Uri
 import android.os.Bundle
+import android.transition.TransitionInflater
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +37,7 @@ class PictureDetailFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             navController.popBackStack()
         }
+        setAnimations()
     }
 
     override fun onCreateView(
@@ -72,6 +74,12 @@ class PictureDetailFragment : Fragment() {
             val action = PictureDetailFragmentDirections.actionPictureDetailFragmentToEditPictureFragment(viewModel.state.value)
             navController.navigate(action)
         }
+    }
+
+    private fun setAnimations() {
+        val animation = TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = animation
+        sharedElementReturnTransition = animation
     }
 
 }

@@ -9,6 +9,14 @@ import kotlinx.coroutines.flow.*
 class PictureRepositoryImpl(
     private val dao: PictureDao
 ): PictureRepository {
+    override fun getPicturesByName(query: String): Flow<List<PictureItem>> {
+        return dao.getPicturesByName(query).map { list ->
+            list.map { pictureEntity ->
+                pictureEntity.toPictureItem()
+            }
+        }
+    }
+
     override fun getPictures(): Flow<List<PictureItem>> {
 
         return dao.getPictures().map { list ->
@@ -21,10 +29,6 @@ class PictureRepositoryImpl(
 
     override suspend fun insertPicture(picture: PictureItem) {
         dao.insertPicture(picture.toPictureEntity())
-    }
-
-    override suspend fun deletePicture(picture: PictureItem) {
-        dao.deletePicture(picture.toPictureEntity())
     }
 
 }

@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface PictureRepository {
 
+    fun getPicturesByName(query: String): Flow<List<PictureItem>>
+
     fun getPictures(): Flow<List<PictureItem>>
 
     suspend fun insertPicture(picture: PictureItem)
-
-    suspend fun deletePicture(picture: PictureItem)
 
 }

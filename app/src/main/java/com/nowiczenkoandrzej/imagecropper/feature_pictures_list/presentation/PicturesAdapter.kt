@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.nowiczenkoandrzej.imagecropper.R
 import com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureItem
+import com.nowiczenkoandrzej.imagecropper.feature_picture_details.util.DetailsElements
 
 class PicturesAdapter(
     val context: Context
@@ -46,6 +47,10 @@ class PicturesAdapter(
             .into(holder.picture)
         holder.title.text = pictures[position].title
         holder.date.text = pictures[position].lastEdit.toString()
+
+        holder.picture.transitionName = "transition_image_$position"
+        holder.title.transitionName = "transition_title_$position"
+        holder.date.transitionName = "transition_date_$position"
     }
 
     override fun getItemCount() = pictures.size
@@ -65,7 +70,12 @@ class PicturesAdapter(
         }
 
         override fun onClick(v: View?) {
-            listener.onItemClick(adapterPosition)
+            val items = DetailsElements(
+                picture = picture,
+                title = title,
+                date = date
+            )
+            listener.onItemClick(adapterPosition, items)
         }
     }
 
@@ -74,7 +84,8 @@ class PicturesAdapter(
     }
 
     interface ItemClickListener {
-        fun onItemClick(position: Int)
+        fun onItemClick(position: Int, items: DetailsElements)
     }
+
 
 }

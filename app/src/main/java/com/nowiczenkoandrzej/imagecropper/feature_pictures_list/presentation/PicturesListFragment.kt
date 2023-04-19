@@ -4,11 +4,14 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.SearchView
+import android.widget.SearchView.OnQueryTextListener
+import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -16,13 +19,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.recyclerview.widget.GridLayoutManager
+import com.nowiczenkoandrzej.imagecropper.BuildConfig
+import com.nowiczenkoandrzej.imagecropper.R
 import com.nowiczenkoandrzej.imagecropper.core.domain.model.PictureItem
 import com.nowiczenkoandrzej.imagecropper.databinding.FragmentPicturesListBinding
+import com.nowiczenkoandrzej.imagecropper.feature_picture_details.util.DetailsElements
 import com.nowiczenkoandrzej.imagecropper.feature_pictures_list.util.AnimationHandler
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_picture_detail.view.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -31,14 +41,13 @@ class PicturesListFragment : Fragment(), PicturesAdapter.ItemClickListener {
 
     @Inject lateinit var anim: AnimationHandler
 
-    //private val anim: AnimationHandler by lazy { AnimationHandler(requireContext()) }
-
     private var clicked = false
 
     private val viewModel: PicturesListViewModel by viewModels()
 
     private var _binding: FragmentPicturesListBinding? = null
     private val binding get() = _binding!!
+
 
     private lateinit var navController: NavController
 
@@ -56,11 +65,31 @@ class PicturesListFragment : Fragment(), PicturesAdapter.ItemClickListener {
         navController.navigate(action)
     }
 
+
+    private var mImageUri: Uri? = null
+    private val getImageFromCamera = registerForActivityResult(
+        ActivityResultContracts.TakePicture(),
+    ) { isTaken ->
+        if(isTaken) {
+            mImageUri.let { uri ->
+                val picture = PictureItem(
+                    picture = uri.toString(),
+                    originalPicture = uri.toString()
+                )
+                val action = PicturesListFragmentDirections.actionPicturesListFragmentToEditPictureFragment(picture)
+                navController.navigate(action)
+            }
+
+        }
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentPicturesListBinding.inflate(inflater, container, false)
+        setHasOptionsMenu(true)
         return binding.root
     }
 
@@ -78,6 +107,28 @@ class PicturesListFragment : Fragment(), PicturesAdapter.ItemClickListener {
         _binding = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.search_menu, menu)
+        val searchItem = menu.findItem(R.id.action_search)
+        val searchView = searchItem.actionView as SearchView
+        searchView.queryHint = "Search by title"
+        searchView.setOnQueryTextListener(object : OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if(newText != null)
+                    viewModel.getPicturesByName(newText)
+                else
+                    viewModel.getPicturesByName("")
+                return false
+            }
+        })
+
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
 
     private fun setRecycleView() {
         picturesAdapter = PicturesAdapter(requireContext())
@@ -92,13 +143,10 @@ class PicturesListFragment : Fragment(), PicturesAdapter.ItemClickListener {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.pictureList.collect { pictures ->
                 picturesAdapter.setList(pictures)
-                Log.d("TAG", "subscribeCollector: $pictures")
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.position.collect { pos ->
-                Log.d("Position", "subscribeCollector: $pos")
-                Log.d("Position", "subscribeCollector: lm : ${binding.rvPictures.layoutManager}")
                 binding.rvPictures.post {
                     binding.rvPictures.layoutManager?.scrollToPosition(pos)
                 }
@@ -117,7 +165,7 @@ class PicturesListFragment : Fragment(), PicturesAdapter.ItemClickListener {
         }
 
         binding.btnCamera.setOnClickListener {
-
+            takePicture()
         }
     }
 
@@ -147,12 +195,37 @@ class PicturesListFragment : Fragment(), PicturesAdapter.ItemClickListener {
     }
 
 
-    override fun onItemClick(position: Int) {
+
+    override fun onItemClick(position: Int, items: DetailsElements) {
         val picture = picturesAdapter.getItem(position)
         val action = PicturesListFragmentDirections.actionPicturesListFragmentToPictureDetailFragment(picture)
         viewModel.setPosition(position)
-        Log.d("Position", "onItemClick: $position")
-        navController.navigate(action)
+
+        val extras = FragmentNavigator.Extras.Builder()
+            .addSharedElement(items.picture, "transition_details_image")
+            .addSharedElement(items.title, "transition_details_title")
+            .addSharedElement(items.date, "transition_details_date")
+            .build()
+
+        navController.navigate(action, extras)
+    }
+
+    private fun takePicture() {
+        lifecycleScope.launchWhenStarted {
+            getTmpFileUri().let { uri ->
+                mImageUri = uri
+                getImageFromCamera.launch(uri)
+            }
+        }
+    }
+
+    private fun getTmpFileUri(): Uri {
+        val tmpFile = File.createTempFile("tmp_image_file", ".png", requireContext().cacheDir).apply {
+            createNewFile()
+            deleteOnExit()
+        }
+
+        return FileProvider.getUriForFile(requireContext(), "${BuildConfig.APPLICATION_ID}.provider", tmpFile)
     }
 
 }

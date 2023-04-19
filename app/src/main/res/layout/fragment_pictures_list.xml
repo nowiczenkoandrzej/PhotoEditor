@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/background_green"
     tools:context=".feature_pictures_list.presentation.PicturesListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:transitionGroup="true"/>
 
     <ProgressBar
         android:layout_width="wrap_content"
@@ -34,7 +35,6 @@
         android:focusable="true"
         android:src="@drawable/ic_baseline_add_24"
         android:tint="@android:color/white"
-        app:backgroundTint="@color/dark_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -48,7 +48,6 @@
         android:src="@drawable/ic_outline_add_to_photos_24"
         android:tint="@android:color/white"
         android:visibility="invisible"
-        app:backgroundTint="@color/dark_green"
         app:layout_constraintBottom_toTopOf="@+id/btn_main"
         app:layout_constraintEnd_toEndOf="@+id/btn_main"
         app:layout_constraintStart_toStartOf="@+id/btn_main" />
@@ -63,7 +62,6 @@
         android:src="@drawable/ic_outline_camera_24"
         android:tint="@android:color/white"
         android:visibility="invisible"
-        app:backgroundTint="@color/dark_green"
         app:layout_constraintBottom_toTopOf="@+id/btn_gallery"
         app:layout_constraintEnd_toEndOf="@+id/btn_main"
         app:layout_constraintStart_toStartOf="@+id/btn_main" />
