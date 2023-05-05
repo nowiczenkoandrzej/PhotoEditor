@@ -1,10 +1,10 @@
 # PhotoEditor
 
-In **PhotoEditor** app you can take photo using your camera or choose picture from your gallery and do some simple editing with it. You can apply one of 3 filters, resize and turn around your picture.  ⚡
+In the **PhotoEditor** app you can take photo using your camera or choose a picture from your gallery and do some simple editing with it. You can apply one of three filters, resize and rotate your picture.  ⚡
 
 ![End to end gif](pictures/endtoend.gif)
 
-App was built using libraries such as:
+The app was built using libraries such as:
 * **Room Database** 🗃
 * **Navigation Component** 🗺
 * **Android-Image-Cropper** ✂
@@ -16,21 +16,21 @@ with MVVM architecture.
 
 ## Navigation
 
-App uses **Navigation Component** and contains single activity which is navHost for all fragments. 
+The app uses the **Navigation Component** and contains a single activity, which serves as navHost for all fragments. 
 
 ![Nav graph picture](pictures/navgraph.png)
 
 
-To navige between fragment I decided to use **actions** what allows to pass arguments.
+To navige between fragment, I decided to use **actions** which allows to pass arguments.
 
-I also used **Shared Element Transition** what results in smoother and nice looking animations.
+I also used **Shared Element Transition** resulting in smoother and nicer-looking animations.
 
 ![Shared Element Transition](pictures/sharedElement.gif)
 
 
 ## Storing pictures
 
-Every picture is represented by data class: **PictureItem** which is used in whole application except of inserting and reading from database. Class has reference to original picture, because it simplifies editing already posted picture.
+Every picture is represented by a data class: **PictureItem** which is used throughout the application except of inserting and reading from database. The class has a reference to original picture because it simplifies editing already posted picture.
 Class is **Parcelable** to simplifie passing object between fragments.
 
 ```kotlin
@@ -43,7 +43,7 @@ data class PictureItem(
     val lastEdit: LocalDate = LocalDate.now(),
 ): Parcelable
 ```
-There is also class dedicated to database:
+There is also a class dedicated to database:
 ```kotlin
 @Entity
 data class PictureEntity(
@@ -81,7 +81,7 @@ fun PictureItem.toPictureEntity(): PictureEntity {
 }
 ```
 
-At the beginnig of develompent I decided to store all pictures as bitmaps in database. I created special **TypeConverter** for Bitmaps to convert them to ByteArrays, because Bitmaps can't be stored in Room Database. It resulted in long loading time in list fragment, so I deciced to store Uri path in database what decreased loading time a lot.
+At the beginnig of develompent I decided to store all pictures as bitmaps in database. I created special **TypeConverter** for Bitmaps to convert them to ByteArrays because Bitmaps can't be stored in Room Database. It resulted in long loading time in list fragment, so I deciced to store Uri path in database what decreased loading time a lot.
 
 
 ## Functionality
@@ -122,10 +122,10 @@ private var mImageUri: Uri? = null
 ```
 and edit it. 
 
-For cropping and turning pictures I used [Android-Image-Cropper](https://github.com/ArthurHub/Android-Image-Cropper) 
-library and integrated it in fragment responsible for editing insted of using seperate Activity just for cropping and rotating pictures what was easier approach. It results in better UX because user can resize, rotate and apply filters on single screen.
+For cropping and rotating pictures I used [Android-Image-Cropper](https://github.com/ArthurHub/Android-Image-Cropper) 
+library and integrated it into fragment responsible for editing insted of using seperate Activity just for cropping and rotating pictures, which was easier approach. It results in better UX because user can resize, rotate and apply filters on single screen.
 
-For applying filters on pictures I created seperate class that uses **ColorMatrixColorFilter** on Bitmap.
+For applying filters on pictures, I created seperate class that uses **ColorMatrixColorFilter** on Bitmap.
 
 It is handled in ViewModel by method: 
 
@@ -148,6 +148,6 @@ private fun addFilter(filterType: FilterType, context: Context){
     }
 ```
 
-App also has **SearchBar** what allows user search saved pictures by names.
+The app also has a **SearchBar** what allows user search saved pictures by name.
 
 ![SearchBar](pictures/searchbar.gif)
